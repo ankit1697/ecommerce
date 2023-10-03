@@ -1,0 +1,63 @@
+{% extends 'second_base.html' %}
+
+{% load cart_tag %}
+
+{% block content %}
+
+<div class="container">
+	
+	<div class="col-md-12 align-center">
+		<i class="far fa-check-circle color-purple" style="font-size: 5em;"></i>
+		<p class="mt-4">Order Placed!</p>
+
+		{% for order in order %}
+			<div class="card no-border-radius mt-5 mb-5 col-md-10 m-auto">
+			  	<div class="card-body">
+			    {% for item in order.item.all %}
+			    	<div class="row mt-2">
+			    		<div class="col-md-2">
+			    			<img class="col-md-12 vertical-middle" src="{{item.item.image.url}}"> 
+			    		</div>
+			    		<div class="col-md-5">
+			    			<p class="card-text font-small align-left">{{item.item}} X {{item.quantity}}</p>
+			    			<p class="font-small align-left">&#8377;{{item.item.price|multiply:item.quantity}}</p>
+			    		</div>
+			    		<div class="col-md-5">
+			    			{% if forloop.first %}
+			    			{% if order.status == 'Completed' %}
+					    	<p class="float-right font-small">Delivered on {{order.delivery}} &nbsp;<i class="fas fas-order fa-check-circle vertical-middle"></i></p>
+					    	{% elif order.status == 'Pending' %}
+					    	<p class="float-right font-small">To be delivered on {{order.delivery}}, {{order.delivery_time}}&nbsp; <i class="fas fas-order fa-clock vertical-middle"></i></p>
+					    	{% else %}
+					    	<p class="float-right font-small">Cancelled on {{order.cancelled_on | date}}&nbsp; <i class="fas fas-order fa-times-circle vertical-middle"></i></p>
+					    	{% endif %}
+					    	{% endif %}
+			    		</div>
+			    	</div>
+			    {% endfor %}
+			  	</div>
+			  	<div class="card-footer bg-white">
+			  		<div class="row">
+			  			{% if order.comments %}<div class="col-md-3 mt-3">{% else %}<div class="col-md-3">{% endif %}
+					  		{% if order.status == 'Pending' %}
+					  		<a href="{% url 'order_cancel' order.id user.id %}" class="col-md-12"  onclick="return confirm('Are you sure you want to cancel this order?');"><button class="col-md-12 btn bg-purple color-white no-border-radius font-small width-full">CANCEL</button></a>
+					  		{% else %}
+					  		<a href="{% url 'reorder' order.id user.id %}" class="col-md-12"><button class="btn bg-purple color-white no-border-radius font-small width-full">REORDER</button></a>
+					  		{% endif %}
+					  	</div>
+				  		<div class="col-md-9 mt-1">
+				  			<div class="col-md-12">
+						  		<p class="float-right font-small">Total paid: &#8377;{{order.amount}}</p>
+						  	</div>
+						  	<div class="col-md-12">
+							  	{% if order.comments %}
+						  		<p class="float-right font-small" style="clear: right;">Cooking instructions: {{order.comments}}</p>
+						  		{% endif %}
+						  	</div>
+					  	</div>
+				  	</div>
+			  	</div>
+			</div>
+			{% endfor %}
+</div>
+{% endblock %}

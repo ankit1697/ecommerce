@@ -1,0 +1,73 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+{% load socialaccount %}
+
+<div class="container mt-5">
+
+	<div class="row">
+		<div class="col-md-5">
+			<img src="/media/misc/login.png" width="400">
+		</div>
+
+
+		<div class="col-md-7">
+
+			{% if form.errors %}
+			    {% for field in form %}
+			        {% for error in field.errors %}
+			            <div class="alert alert-danger">
+			                <strong>{{ error|escape }}</strong>
+			            </div>
+			        {% endfor %}
+			    {% endfor %}
+			    {% for error in form.non_field_errors %}
+			        <div class="alert alert-danger">
+			            <strong>{{ error|escape }}</strong>
+			        </div>
+			    {% endfor %}
+			{% endif %}
+
+			<form action="{% url 'register' %}" method="post" class="col-md-12">{% csrf_token %}
+				<h3>Register</h3>
+				<div class="form-group">
+			    	<input type="text" class="form-control" name="username", placeholder="Enter username" id="id_username" required="required" maxlength="100">
+			  	</div>
+				<div class="form-group">
+			    	<input type="email" class="form-control" name="email", placeholder="Enter email adress" id="id_email" required="required" maxlength="254">
+			  	</div>
+			  	<div class="form-group">
+			    	<input type="password" class="form-control" name="password1" placeholder="Enter password" autocomplete="new-password" required="" id="id_password1">
+			  	</div>
+			  	<div class="form-group">
+			    	<input type="password" class="form-control" placeholder="Re-enter password" name="password2" autocomplete="new-password" required="" id="id_password2">
+			  	</div>
+			  	<div class="form-group">
+			    	<input type="text" class="form-control" placeholder="Enter phone number" name="phone" maxlength="12" required="" id="id_phone">
+			  	</div>
+			  	<div class="form-group">
+			    	<input type="text" class="form-control" placeholder="Enter address" name="address" maxlength="255" required="" id="id_address">
+			  	</div>
+			  	<button type="submit" id="submit" class="btn btn-outline-dark">Register</button>
+			</form>
+
+			<div class="mt-5">
+			  	<div class="col-md-4 mb-2">
+			    	<a class="btn btn-outline-dark social-login-btn" href="{% provider_login_url 'google' %}" role="button" style="text-transform:none">
+			      		<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-up" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+			      		Sign up with Google
+		    		</a>
+			  	</div>
+			  	<div class="col-md-4">
+			    	<a class="btn btn-outline-dark social-login-btn" href="{% provider_login_url 'facebook' %}" role="button" style="text-transform:none">
+			      		<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-up" src="https://upload.wikimedia.org/wikipedia/en/8/8c/Facebook_Home_logo_old.svg" />
+			      		Sign up with Facebook
+			    	</a>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

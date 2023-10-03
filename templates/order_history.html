@@ -1,0 +1,101 @@
+{% extends 'second_base.html' %}
+
+{% load cart_tag %}
+
+{% block content %}
+<div class="container mt-5">
+	<div class="row mb-3">
+		<h3 class="col-md-10"> My Orders</h3>
+		<button class="btn bg-purple color-white no-border-radius col-md-2" data-toggle="modal" data-target="#updateAddress">Edit Profile</button>
+	</div>
+	<div class="row">
+		<div class="sidenav col-md-3">
+			<a class="color-black font-medium" href="{% url 'userdetails' user.id %}">Profile</a>
+			<a class="active color-black font-medium" href="{% url 'order_history' user.id %}">My Orders</a>
+			<a class="color-black font-medium" href="{% url 'address_list' user.id %}">My Addresses</a>
+		</div>
+		<div class="col-md-9">
+			{% if orders %}
+			{% for order in orders %}
+			<div class="card no-border-radius mb-5">
+			  	<div class="card-body">
+			    {% for item in order.item.all %}
+			    	<div class="row mt-2">
+			    		<div class="col-md-2">
+			    			<img class="col-md-12 vertical-middle" src="{{item.item.image.url}}"> 
+			    		</div>
+			    		<div class="col-md-5">
+			    			<p class="card-text font-small">{{item.item}} X {{item.quantity}}</p>
+			    			<p class="font-small">&#8377;{{item.item.price|multiply:item.quantity}}</p>
+			    		</div>
+			    		<div class="col-md-5">
+			    			{% if forloop.first %}
+			    			{% if order.status == 'Completed' %}
+					    	<p class="float-right font-small">Delivered on {{order.delivery}} &nbsp;<i class="fas fas-order fa-check-circle vertical-middle"></i></p>
+					    	{% elif order.status == 'Pending' %}
+					    	<p class="float-right font-small">To be delivered on {{order.delivery}}, {{order.delivery_time}}&nbsp; <i class="fas fas-order fa-clock vertical-middle"></i></p>
+					    	{% else %}
+					    	<p class="float-right font-small">Cancelled on {{order.cancelled_on | date}}&nbsp; <i class="fas fas-order fa-times-circle vertical-middle"></i></p>
+					    	{% endif %}
+					    	{% endif %}
+			    		</div>
+			    	</div>
+			    {% endfor %}
+			  	</div>
+			  	<div class="card-footer bg-white">
+			  		<div class="row">
+			  			{% if order.comments %}<div class="col-md-3 mt-3">{% else %}<div class="col-md-3">{% endif %}
+					  		{% if order.status == 'Pending' %}
+					  		<a href="{% url 'order_cancel' order.id user.id %}" class="col-md-12"  onclick="return confirm('Are you sure you want to cancel this order?');"><button class="col-md-12 btn bg-purple color-white no-border-radius font-small width-full">CANCEL</button></a>
+					  		{% else %}
+					  		<a href="{% url 'reorder' order.id user.id %}" class="col-md-12"><button class="btn bg-purple color-white no-border-radius font-small width-full">REORDER</button></a>
+					  		{% endif %}
+					  	</div>
+				  		<div class="col-md-9 mt-1">
+				  			<div class="col-md-12">
+						  		<p class="float-right font-small">Total paid: &#8377;{{order.amount}}</p>
+						  	</div>
+						  	<div class="col-md-12">
+							  	{% if order.comments %}
+						  		<p class="float-right font-small" style="clear: right;">Cooking instructions: {{order.comments}}</p>
+						  		{% endif %}
+						  	</div>
+					  	</div>
+				  	</div>
+			  	</div>
+			</div>
+			{% endfor %}
+			{% else %}
+			<div class="col-md-12 mt-5 align-center">
+					<img src="/media/misc/order_now.png" width="150" height="150">
+					<h5 class="mt-3">Place your first order!</h5>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="updateAddress">
+    <div class="modal-dialog">
+      <div class="modal-content p-4">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add new address</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        	<form method="post">{% csrf_token %}
+	          	{{form.as_p}}
+	          	<button type="submit" class="btn no-border-radius bg-purple color-white width-full mt-4">Update</button>
+          	</form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

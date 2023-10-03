@@ -1,0 +1,23 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+	<h3>Update Profile</h3>
+<div class="card no-border-radius mt-4">
+  <div class="card-body">
+    <form method="POST"> 
+        <!-- Security token by Django -->
+        {% csrf_token %} 
+  
+        <!-- form as paragraph -->
+        {{ form.as_p }} 
+  
+        <button type="submit" id="submit" class="btn bg-purple color-white no-border-radius">Update</button>
+    </form> 
+  </div>
+</div>
+
+</div>
+{% endblock %}

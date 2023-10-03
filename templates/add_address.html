@@ -1,0 +1,35 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+	<h3>Add Address</h3>
+	<div class="card no-border-radius mt-4 col-md-6">
+	  	<div class="card-body">
+	    	<form method="POST">{% csrf_token %}
+	        	{{ form.as_p }} 
+	  			
+	        	<button type="submit" id="submit" class="btn bg-purple color-white no-border-radius">Add Address</button>
+	    	</form> 
+	  	</div>
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$("[for='alias_field']").hide()
+		$('#alias_field').hide()
+		$('#id_category').change(function() {
+			if($('#id_category').val() == 'Other') {
+				$("[for='alias_field']").show()
+				$('#alias_field').show()
+			}
+			else {
+				$("[for='alias_field']").hide()
+				$('#alias_field').hide()
+			}
+		})
+	})
+	</script>
+{% endblock %}

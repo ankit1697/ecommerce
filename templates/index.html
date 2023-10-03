@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="col-md-12 align-center color-white">
+		<h1 class="p-5 m-auto">Essencious</h1>
+		<form action="{% url 'searchproducts' %}" method="GET" value="{{request.GET.q}}" class="col-md-6 m-auto">
+		<div class="inner-addon right-addon">
+			<i class="fa fa-search glyphicon"></i>
+			<input type="text" name="q" value="{{request.GET.q}}" placeholder="Search for product or category" class="form-control p-4 white-placeholder" id="search-input">
+			<input type="submit" name="submit" value="Search" class="col-md-1" hidden>
+		</div>
+	</form>
+	</div>
+</div>
+
+<div class="container-fluid">
+
+	<div class="d-none d-sm-block col-md-12 align-center p-5" id="index-category">
+		<h4 class="align-center mb-5">What would you like to have today?</h4>
+		<div class="row cat-list" id="cat_list">
+			
+		</div>
+	</div>
+
+	<div class="d-md-none align-center p-5">
+		<h4 class="align-center mb-5">What would you like to have today?</h4>
+		<div class="cat-list" id="phone_cat_list" style="overflow:auto !important; white-space: nowrap !important;">
+			
+		</div>
+	</div>
+
+<div class="col-md-11 align-right mt-5">
+	<span class="border-black p-1 font-small border-radius pl-2 pr-2 col">Showing: <span id="filter-description">All Cakes</span></span>
+	<a href="javascript:void(0)" id="sort-btn" class="color-black asc col no-decoration">Sort <i class="fas fa-sort-amount-up-alt"></i></a>
+</div>
+
+<div class="container container-index">
+	
+	<div class="row">
+		<div class="sidenav col-md-2 col-sm-12 mt-4">
+			<a href="javascript:void(0)" class="font-medium color-black active" id="all-btn">All</a>
+			<a href="javascript:void(0)" class="font-medium color-black" id="featured-btn">Featured</a>
+			<a href="javascript:void(0)" class="font-medium color-black" id="top-selling-btn">Top-selling</a>
+		</div>
+		<div class="row col-md-10" id="product-list-main">
+			{% for item in items %}
+			<div class="col-md-4 col-sm-12 product-list" id="product-list" data-target="{{item.category}}" data-amount="{{item.price}}">
+				<div class="product-grid new">
+					<div class="product-image">
+						<a href="#" class="image">
+							<img src="{{item.image.url}}" class="img-fluid">
+						</a>
+						<ul class="product-links">
+							<!-- <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li> -->
+							<li><a href="{% url 'itemdescription' item.id item.category.id %}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+							<li><a href="{% url 'cart_add_index' item.id item.category.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-bag"></i></a></li>
+						</ul>
+						<!-- <div class="price">&#8377;{{item.price}}</div> -->
+					</div>
+					<div class="product-content">
+						<p class="title font-1">{{item.name}}</p>
+						<div class="row">
+							<p class="col-md-6 title font-small">{{item.category}}</p>
+							<p class="col-md-6 font-small font-weight-700 align-right">&#8377;{{item.price}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			{% for item in featured_items %}
+			<div class="col-md-4 col-sm-6 featured-list" id="featured-list" data-target="{{item.category}}" data-amount="{{item.price}}" data-target="{{item.category}}">
+				<div class="product-grid new">
+					<div class="product-image">
+						<a href="#" class="image">
+							<img src="{{item.image.url}}">
+						</a>
+						<ul class="product-links">
+							<!-- <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li> -->
+							<li><a href="{% url 'itemdescription' item.id item.category.id %}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+							<li><a href="{% url 'cart_add_index' item.id item.category.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-bag"></i></a></li>
+						</ul>
+						<!-- <div class="price">&#8377;{{item.price}}</div> -->
+					</div>
+					<div class="product-content">
+						<p class="title font-1">{{item.name}}</p>
+						<div class="row">
+							<p class="col-md-6 title font-small">{{item.category}}</p>
+							<p class="col-md-6 font-small font-weight-700 align-right">&#8377;{{item.price}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			{% for item in top_selling_items %}
+			<div class="col-md-4 col-sm-12 top-selling-list" id="top-selling-list" data-target="{{item.category}}" data-amount="{{item.price}}" data-target="{{item.category}}">
+				<div class="product-grid new">
+					<div class="product-image">
+						<a href="#" class="image">
+							<img src="{{item.image.url}}">
+						</a>
+						<ul class="product-links">
+							<!-- <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li> -->
+							<li><a href="{% url 'itemdescription' item.id item.category.id %}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+							<li><a href="{% url 'cart_add_index' item.id item.category.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-bag"></i></a></li>
+						</ul>
+						<!-- <div class="price">&#8377;{{item.price}}</div> -->
+					</div>
+					<div class="product-content">
+						<p class="title font-1">{{item.name}}</p>
+						<div class="row">
+							<p class="col-md-6 title font-small">{{item.category}}</p>
+							<p class="col-md-6 font-small font-weight-700 align-right">&#8377;{{item.price}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<script>
+	/* affix the navbar after scroll below header */
+$(document).ready(function() {
+
+	$(window).scroll(function() {    
+		var scroll = $(window).scrollTop();
+
+		if (scroll >= 350) {
+			$(".navbar").addClass("bg-white");
+			$(".nav-link").removeClass("color-white")
+			$(".nav-link").addClass("color-black")
+			$(".navbar").addClass("bottom-shadow")
+		} else {
+			$(".navbar").removeClass("bg-white");
+			$(".nav-link").removeClass("color-black")
+			$(".nav-link").addClass("color-white")
+			$(".navbar").removeClass("bottom-shadow")
+		}
+	});
+
+	$.ajax({
+		type: "GET",
+		url: "/api/categories/",
+		success: function(data) {
+			for(i=0; i<data.length; i++) {
+				if(i == 0) {
+					$('#cat_list').append("<a href='javascript:void(0)' class='cat_id no-decoration col box-shadow pt-4 ml-4 mr-4 active' data='" + data[i].name +"'><img src=" + data[i].image + " class='category-logos'> <p class='mt-2 font-small'>" + data[i].name + "</p></a>")
+
+					$('#phone_cat_list').append("<a href='javascript:void(0)' class='display_inline cat_id no-decoration box-shadow pt-4 ml-4 mr-4 active' data='" + data[i].name +"'><img src=" + data[i].image + " class='category-logos'> <p class='mt-2 font-small'>" + data[i].name + "</p></a>")
+				}
+				else {
+					$('#cat_list').append("<a href='javascript:void(0)' class='cat_id no-decoration col box-shadow pt-4 ml-4 mr-4' data='" + data[i].name +"'><img src=" + data[i].image + " class='category-logos'> <p class='mt-2 font-small'>" + data[i].name + "</p></a>")
+
+					$('#phone_cat_list').append("<a href='javascript:void(0)' class='display_inline cat_id no-decoration box-shadow pt-4 ml-4 mr-4' data='" + data[i].name +"'><img src=" + data[i].image + " class='category-logos'> <p class='mt-2 font-small'>" + data[i].name + "</p></a>")
+				}
+			}
+		},
+		error: function(xhr, textStatus) {
+			   alert('error');
+		}
+	});
+
+	
+ //    $.ajaxSetup({
+	//   	headers: { "X-CSRFToken": '{{csrf_token}}' }
+	// });
+
+ //    $("#cat_add_form").on('submit', function (event) {
+ //    	event.preventDefault();
+ //    	var data = {"name": $("#cat_name").val()};
+ //    	data_json = JSON.stringify(data)
+
+	// 	$.ajax({
+ //      		type: "POST",
+ //      		url: "api/categories/",
+ //      		dataType: "json",
+ //  			contentType: "application/json",
+			
+ //      		data: data_json,
+ //      		success: function () {
+				
+ //      		},
+ //      		error: function(xhr, textStatus, errorThrown) {
+ //      			alert(errorThrown)
+ //      		}
+			
+ //    	});
+ //    	return false; //<---- move it here
+ //  	});
+
+	$('.product-grid').each(function () {
+		$(this).find('img').css('opacity', '1')
+		$(this).hover(function () {
+			$(this).find('img').toggleClass('opacity-half')
+		})
+	})
+
+	$('.product-list').each(function() {
+		if($(this).attr('data-target') != 'Cakes') {
+			$(this).hide()
+		}
+	})
+	$('.featured-list').each(function() {
+			$(this).hide()
+		})
+	$('.top-selling-list').each(function() {
+		$(this).hide()
+	})
+
+
+	$('#cat_list').on('click', '.cat_id' , function (e) {
+		$('.featured-list').each(function() {
+			$(this).hide()
+		})
+		$('.top-selling-list').each(function() {
+			$(this).hide()
+		})
+		$('#all-btn').addClass('active')
+
+		$('#featured-btn').removeClass('active')
+		$('#top-selling-btn').removeClass('active')
+
+		$('.product-list').each(function() {
+			$(this).show()
+		})
+		$(this).addClass('active')
+		$(this).siblings().removeClass('active')
+		var cat = $(this).attr('data');
+
+		$('.product-list').each(function() {
+			if($(this).attr('data-target') != cat) {
+				$(this).hide()
+			}
+		})
+		
+		$('html, body').animate({
+			'scrollTop' : $('#index-category')[0].scrollHeight
+		});
+		$('#filter-description').html('All ' + cat)
+	})
+
+
+	$('#featured-btn').click(function () {
+		$(this).addClass('active')
+		$(this).siblings().removeClass('active')
+		$('.product-list').each(function () {
+			$(this).hide()
+		})
+		$('.top-selling-list').each(function () {
+			$(this).hide()
+		})
+
+		var cat = $('#cat_list').find('.active').text().trim()
+
+		$('.featured-list').each(function () {
+			$(this).show()
+			$('#filter-description').html('Featured Products')
+			if(cat != '') {
+				if($(this).attr('data-target') != cat) {
+					$(this).hide()
+				}
+				$('#filter-description').html('Featured ' + cat)
+			}
+		})
+
+		$('html, body').animate({
+			'scrollTop' : $('#index-category')[0].scrollHeight
+		});
+	})
+
+	$('#top-selling-btn').click(function () {
+		$(this).addClass('active')
+		$(this).siblings().removeClass('active')
+		$('.product-list').each(function () {
+			$(this).hide()
+		})
+		$('.featured-list').each(function () {
+			$(this).hide()
+		})
+		$('.cat_id').each(function() {
+			$(this).removeClass('active')
+		})
+		$('.top-selling-list').each(function () {
+			$(this).show()
+		})
+		$('html, body').animate({
+			'scrollTop' : $('.top-selling-list')[0].scrollHeight
+		});
+		$('#filter-description').html('Top Selling')
+	})
+
+	$('#all-btn').click(function () {
+		$(this).addClass('active')
+		$(this).siblings().removeClass('active')
+
+		$('.featured-list').each(function () {
+			$(this).hide()
+		})
+		$('.top-selling-list').each(function () {
+			$(this).hide()
+		})
+		$('html, body').animate({
+			'scrollTop' : $('#index-category')[0].scrollHeight
+		});
+
+		var cat = $('#cat_list').find('.active').text().trim()
+
+		$('.product-list').each(function () {
+			$(this).show()
+			$('#filter-description').html('All Products')
+			if(cat != '') {
+				if($(this).attr('data-target') != cat) {
+					$(this).hide()
+				}
+				$('#filter-description').html('All ' + cat)
+			}
+		})
+	})
+
+	$('#sort-btn').click(function() {
+		if($(this).hasClass('asc')) {
+			$(this).removeClass('asc');
+			$(this).html("Sort <i class='fas fa-sort-amount-up-alt'></i> ")
+			$('#product-list-main .product-list').sort(function(a, b) {
+				return $(a).data('amount') - $(b).data('amount');
+			}).appendTo('#product-list-main');
+
+			$('#product-list-main .featured-list').sort(function(a, b) {
+				return $(a).data('amount') - $(b).data('amount');
+			}).appendTo('#product-list-main');
+
+			$('#product-list-main .top-selling-list').sort(function(a, b) {
+				return $(a).data('amount') - $(b).data('amount');
+			}).appendTo('#product-list-main');	
+		}
+
+		else {
+			$(this).addClass('asc');
+			$(this).html("Sort <i class='fas fa-sort-amount-down-alt'></i> ")
+			$('#product-list-main .product-list').sort(function(a, b) {
+				return $(b).data('amount') - $(a).data('amount');
+			}).appendTo('#product-list-main');
+
+			$('#product-list-main .featured-list').sort(function(a, b) {
+				return $(b).data('amount') - $(a).data('amount');
+			}).appendTo('#product-list-main');
+
+			$('#product-list-main .top-selling-list').sort(function(a, b) {
+				return $(b).data('amount') - $(a).data('amount');
+			}).appendTo('#product-list-main');	
+		}
+		
+	});
+
+});
+
+</script>
+
+<!-- <script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("cat_list");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+	navbar.classList.add("sticky")
+	$(".navbar").hide();
+  } else {
+	navbar.classList.remove("sticky");
+	$(".navbar").show();
+  }
+}
+</script> -->
+
+{% endblock %}

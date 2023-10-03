@@ -1,0 +1,62 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+	<form action="{% url 'searchproducts' %}" method="GET" value="{{request.GET.q}}">
+		<div class="inner-addon right-addon mt-5">
+	      	<i class="fa fa-search glyphicon"></i>
+	      	<input type="text" name="q" value="{{request.GET.q}}" placeholder="Search For Products or Categories" class="form-control" id="search-input">
+			<input type="submit" name="submit" value="Search" class="col-md-1" hidden>
+	    </div>
+    </form>
+
+{% if submitbutton == 'Search' and request.GET.q != '' %}
+{% if results %}
+<div class="row col-md-12 mt-5">
+
+	{% for result in results %}
+	    <div class="col-md-3 col-sm-6" id="product-list">
+	        <div class="product-grid new">
+	            <div class="product-image">
+	                <a href="#" class="image">
+	                    <img src="{{result.image.url}}">
+	                </a>
+	                <ul class="product-links">
+	                    <!-- <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li> -->
+	                    <li><a href="{% url 'itemdescription' result.id result.category.id %}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+	                    <li><a href="{% url 'cart_add_index' result.id result.category.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-bag"></i></a></li>
+	                </ul>
+	                <!-- <div class="price">&#8377;{{item.price}}</div> -->
+	            </div>
+	            <div class="product-content">
+	                <p class="title font-1">{{result.name}}</p>
+	                <div class="row">
+	                	<p class="col-md-6 title font-small">{{result.category}}</p>
+	                	<p class="col-md-6 font-small font-weight-700 align-right">&#8377;{{result.price}}</p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    {% endfor %}
+</div>
+
+
+{% else %}
+<div class="col-md-12 align-center mt-5">
+	<img src='/media/misc/not_found.png' width="150">
+	<p class="mt-4">Oops! We do not have that at the moment</p>
+</div>
+{% endif %}
+{% endif %}
+
+
+</div>
+
+<script>
+	$(function() {
+		$("#search-input").focus();
+	})
+	</script>
+{% endblock %}

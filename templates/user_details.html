@@ -1,0 +1,68 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+	<div class="row mb-3">
+		<h3 class="col-md-10"> My Profile</h3>
+		<button class="btn bg-purple color-white no-border-radius col-md-2" data-toggle="modal" data-target="#updateAddress">Edit Profile</button>
+	</div>
+	<div class="row">
+		<div class="sidenav col-md-3">
+			<a class="active color-black font-medium" href="{% url 'userdetails' user.id %}">Profile</a>
+			<a class="color-black font-medium" href="{% url 'order_history' user.id %}">My Orders</a>
+			<a class="color-black font-medium" href="{% url 'address_list' user.id %}">My Addresses</a>
+		</div>
+		<div class="col-md-9 mt-1">
+			<div class="card no-border-radius col-md-12">
+		  		<div class="card-body" id="user_details">
+		  		</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="updateAddress">
+    <div class="modal-dialog">
+      	<div class="modal-content p-4">
+      
+	        <!-- Modal Header -->
+	        <div class="modal-header">
+	          	<h4 class="modal-title">Update Profile</h4>
+	          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+	        </div>
+	        
+	        <!-- Modal body -->
+	        <div class="modal-body">
+	        	<form method="post">{% csrf_token %}
+		          	{{form.as_p}}
+		          	<button type="submit" class="btn no-border-radius bg-purple color-white width-full mt-4">Update</button>
+	          	</form>
+	        </div>
+        
+      	</div>
+    </div>
+</div>
+
+<script>
+	/* affix the navbar after scroll below header */
+$(document).ready(function() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/users/",
+        success: function(data) {
+        	for(i=0; i<data.length; i++) {
+        		if(data[i].id == '{{user.id}}')	{
+        			$('#user_details').append("<p class='card-text'>Name: " + data[i].first_name + " " + data[i].last_name + "</p><p class='card-text'>Email: " + data[i].email + "</p><p class='card-text'>Phone Number: " + data[i].phone + "</p>")
+        		}
+        	}
+        },
+        error: function(xhr, textStatus) {
+               alert('error');
+        }});
+});
+
+</script>
+
+{% endblock %}

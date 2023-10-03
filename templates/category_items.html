@@ -1,0 +1,34 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+    	{% for item in items %}
+	    <div class="col-md-3 col-sm-6" id="product-list">
+	        <div class="product-grid new">
+	            <div class="product-image">
+	                <a href="#" class="image">
+	                    <img src="{{item.image.url}}">
+	                </a>
+	                <ul class="product-links">
+	                    <!-- <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li> -->
+	                    <li><a href="{% url 'itemdescription' item.id item.category.id %}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+	                    <li><a href="{% url 'cart_add_index' item.id item.category.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-bag"></i></a></li>
+	                </ul>
+	                <!-- <div class="price">&#8377;{{item.price}}</div> -->
+	            </div>
+	            <div class="product-content">
+	                <p class="title font-1">{{item.name}}</p>
+	                <div class="row">
+	                	<p class="col-md-6 title font-small">{{item.category}}</p>
+	                	<p class="col-md-6 font-small font-weight-700 align-right">&#8377;{{item.price}}</p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    {% endfor %}
+	</div>
+</div>
+
+{% endblock %}

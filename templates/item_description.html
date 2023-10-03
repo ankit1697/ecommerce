@@ -1,0 +1,36 @@
+{% extends 'second_base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+	<div class="row mb-5">
+		<div class="col-md-6"><img src="{{item.image.url}}"></div>
+		<div class="col-md-6">
+			<h2>{{item.name}}</h2>
+			<h5 class="color-purple font-weight-700 mt-4">&#8377;{{item.price}}</h5>
+			<h5 class="mt-4">Description</h5>
+			<p id="item-desc">{{item.description}}</p>
+			<a href="{% url 'cart_add_index' item.id item.category.id %}" class="no-decoration bottom-align width-full"><button type="button" class="btn btn-block mt-4 bg-purple color-white no-border-radius">Add To Cart</button></a>
+		</div>
+	</div>
+	<!-- <h2>People also bought</h2>
+	<div class="row mb-5">
+
+		{% for item in item_list %}
+		<div class="col-md-3 zoom mt-5">
+			<a href="{% url 'itemdescription' item.id item.category.id %}" class="no-decoration">
+				<div class="card col-md-12 product-card">
+					<img class="card-img-top" src="{{ item.image.url }}" alt="Card image">
+					<div class="card-body product-card-body">
+						<h4 class="card-title">{{ item.name }}</h4>
+						<p class="card-text">{{item.price}}</p>
+						<p><a href="{% url 'cart_add_index' item.id item.category.id %}">Add To Cart</a></p>
+					</div>
+				</div>
+			</a>
+		</div>
+		{% endfor %}
+	</div> -->
+</div>
+
+{% endblock %}
